@@ -177,10 +177,12 @@ pygame.display.update()
 def entrarCiudad(tren, casillasCiudad):
     # MUEVE EL TREN A UNA CASILLA LIBRE DE LA CIUDAD DESTINO
     i = 0
+    # BUSCA UNA CASILLA LIBRE EN LA CIUDAD DESTINO
     while not casillasCiudad[i][1].acquire(False):
         i += 1
     tren[1][1].release()
     pygame.draw.rect(ventana, colorNegro, (tren[1][0], dimensionTren))
+    # MUEVE EL TREN A LA CASILLA LIBRE EN LA CIUDAD DESTINO
     tren[1] = casillasCiudad[i]
     pygame.draw.rect(ventana, tren[0], (tren[1][0], dimensionTren))
     pygame.display.update()
@@ -189,9 +191,11 @@ def entrarCiudad(tren, casillasCiudad):
 def moverTrenAPuente(tren, casillasCamino):
     # MUEVE EL TREN DESDE UNA CIUDAD HASTA LA ENTRADA DEL PUENTE A TRAVES DEL CAMINO INDICADO
     for casilla in casillasCamino:
+        # ESPERA A QUE LA CASILLA ESTE LIBRE
         casilla[1].acquire()
         tren[1][1].release()
         pygame.draw.rect(ventana, colorNegro, (tren[1][0], dimensionTren))
+        # MUEVE EL TREN A LA SIGUIENTE CASILLA
         tren[1] = casilla
         pygame.draw.rect(ventana, tren[0], (tren[1][0], dimensionTren))
         pygame.display.update()
@@ -200,17 +204,21 @@ def moverTrenAPuente(tren, casillasCamino):
 
 def pasarPuenteDesdeA(tren):
     # MUEVE EL TREN A TRAVES DEL PUENTE CON SENTIDO HACIA LA DERECHA
+    # ESPERA A QUE LA PRIMERA CASILLA DEL PUENTE ESTE LIBRE
     casillasPuente[0][1].acquire()
     tren[1][1].release()
     pygame.draw.rect(ventana, colorNegro, (tren[1][0], dimensionTren))
+    # MUEVE EL TREN A LA PRIMERA CASILLA DEL PUENTE
     tren[1] = casillasPuente[0]
     pygame.draw.rect(ventana, tren[0], (tren[1][0], dimensionTren))
     pygame.display.update()
     time.sleep(1)
     for i in range(1, 5):
+        # ESPERA A QUE LA SIGUIENTE CASILLA DEL PUENTE ESTE LIBRE
         casillasPuente[i][1].acquire()
         tren[1][1].release()
         pygame.draw.rect(ventana, colorAnaranjado, (tren[1][0], dimensionTren))
+        # MUEVE EL TREN A LA SIGUIENTE CASILLA DEL PUENTE
         tren[1] = casillasPuente[i]
         pygame.draw.rect(ventana, tren[0], (tren[1][0], dimensionTren))
         pygame.display.update()
@@ -219,17 +227,21 @@ def pasarPuenteDesdeA(tren):
 
 def pasarPuenteDesdeB(tren):
     # MUEVE EL TREN A TRAVES DEL PUENTE CON SENTIDO HACIA LA IZQUIERDA
+    # ESPERA A QUE LA ULTIMA (PRIMERA DESSDE B) CASILLA DEL PUENTE ESTE LIBRE
     casillasPuente[4][1].acquire()
     tren[1][1].release()
     pygame.draw.rect(ventana, colorNegro, (tren[1][0], dimensionTren))
+    # MUEVE EL TREN A LA ULTIMA (PRIMERA DESDE B) CASILLA DEL PUENTE
     tren[1] = casillasPuente[4]
     pygame.draw.rect(ventana, tren[0], (tren[1][0], dimensionTren))
     pygame.display.update()
     time.sleep(1)
     for i in range(3, -1, -1):
+        # ESPERA A QUE LA SIGUIENTE CASILLA DEL PUENTE ESTE LIBRE
         casillasPuente[i][1].acquire()
         tren[1][1].release()
         pygame.draw.rect(ventana, colorAnaranjado, (tren[1][0], dimensionTren))
+        # MUEVE EL TREN A LA SIGUIENTE CASILLA DEL PUENTE
         tren[1] = casillasPuente[i]
         pygame.draw.rect(ventana, tren[0], (tren[1][0], dimensionTren))
         pygame.display.update()
@@ -239,9 +251,11 @@ def pasarPuenteDesdeB(tren):
 def moverTrenACiudad(tren, casillasCamino):
     # MUEVE EL TREN A TRAVES DEL CAMINO HACIA CIUDAD B
     for i in range(1, len(casillasCamino)):
+        # ESPERA A QUE LA SIGUIENTE CASILLA DEL CAMINO ESTE LIBRE
         casillasCamino[i][1].acquire()
         tren[1][1].release()
         pygame.draw.rect(ventana, colorNegro, (tren[1][0], dimensionTren))
+        # MUEVE EL TREN A LA SIGUIENTE CASILLA DEL CAMINO
         tren[1] = casillasCamino[i]
         pygame.draw.rect(ventana, tren[0], (tren[1][0], dimensionTren))
         pygame.display.update()
@@ -250,9 +264,11 @@ def moverTrenACiudad(tren, casillasCamino):
 
 def salirPuenteDesdeA(tren):
     # MUEVE EL TREN DEL PUENTE AL CAMINO HACIA CIUDAD B
+    # ESPERA A QUE LA PRIMERA CASILLA DEL CAMINO HACIA CIUDAD B ESTE LIBRE
     casillasCaminoInferiorB[0][1].acquire()
     tren[1][1].release()
     pygame.draw.rect(ventana, colorAnaranjado, (tren[1][0], dimensionTren))
+    # MUEVE EL TREN A LA PRIMERA CASILLA DEL CAMINO HACIA CIUDAD B
     tren[1] = casillasCaminoInferiorB[0]
     pygame.draw.rect(ventana, tren[0], (tren[1][0], dimensionTren))
     pygame.display.update()
@@ -261,9 +277,11 @@ def salirPuenteDesdeA(tren):
 
 def salirPuenteDesdeB(tren):
     # MUEVE EL TREN DEL PUENTE AL CAMINO HACIA CIUDAD A
+    # ESPERA A QUE LA PRIMERA CASILLA DEL CAMINO HACIA CIUDAD A ESTE LIBRE
     casillasCaminoSuperiorA[0][1].acquire()
     tren[1][1].release()
     pygame.draw.rect(ventana, colorAnaranjado, (tren[1][0], dimensionTren))
+    # MUEVE EL TREN A LA PRIMERA CASILLA DEL CAMINO HACIA CIUDAD A
     tren[1] = casillasCaminoSuperiorA[0]
     pygame.draw.rect(ventana, tren[0], (tren[1][0], dimensionTren))
     pygame.display.update()
@@ -293,40 +311,54 @@ def entradaPuente(sentidoTren, trenesOpuestosEsperando, trenesMismoEsperando):
         if sentido == sentidoTren:
             if len(trenesOpuestosEsperando) > 0:
                 if trenesOpuestosEsperando[0][1] > 0:
+                    # TREN SENTIDO OPUESTO ESPERA UN TURNO Y SE LE RESTA UN TURNO DE ESPERA
                     trenesOpuestosEsperando[0][1] -= 1
                 else:
+                    # TREN SENTIDO OPUESTO PASA
                     sentido = 1 if sentidoTren == 2 else 2
         else:
             if trenesMismoEsperando[0][1] > 0:
+                # TREN MISMO SENTIDO ESPERA UN TURNO Y SE LE RESTA UN TURNO DE ESPERA
                 trenesMismoEsperando[0][1] -= 1
             else:
+                # TREN MISMO SENTIDO PASA
                 sentido = 1 if sentidoTren == 2 else 2
     else:
+        # PUENTE LIBRE, PASA TREN
         sentido = sentidoTren
     mutexPuente.release()
+    # RETORNA TRUE SI EL TREN PUEDE PASAR (SENTIDO DEL PUENTE IGUAL AL SENTIDO DEL TREN)
     return sentido == sentidoTren
 
 
 def activarTrenCiudadA():
     # ACTIVA TREN EN CIUDAD A Y LO MUEVE A CIUDAD B
     time.sleep(random.randrange(2, 20))
+    # SALE DE CIUDAD A, EVITANDO QUE SALGAN DOS TRENES AL MISMO TIEMPO
     mutexSalidaCiudadA.acquire()
     tren = trenesA[0]
     trenesA.remove(tren)
     mutexSalidaCiudadA.release()
+    # MUEVE A LA ENTRADA DEL PUENTE
     moverTrenAPuente(tren, casillasCaminoInferiorA)
+    # LEVANTA SEMAFORO QUE INDICA QUE HAY UN TREN ESPERANDO Y LO AGREGA A LA LISTA DE TRENES ESPERANDO
     trenesEsperando.release()
     trenesAEsperando.append([tren, 2])
+    # ESPERA A QUE EL TREN PUEDA ENTRAR AL PUENTE
     while not entradaPuente(1, trenesBEsperando, trenesAEsperando):
+        # SI NO PUEDE PASAR, ESPERA A QUE EL PUENTE ESTE LIBRE
         puenteLibre.acquire()
     trenesAEsperando.pop(0)
+    # PASA SI HAY MENOS DE DOS TRENES EN EL PUENTE
     maxTrenesPuente.acquire()
     verdeParaA()
     trenEntroPuente.release()
+    # MUEVE EL TREN A TRAVES DEL PUENTE
     pasarPuenteDesdeA(tren)
     salirPuenteDesdeA(tren)
     trenSalioPuente.release()
     maxTrenesPuente.release()
+    # MUEVE EL TREN A CIUDAD B
     moverTrenACiudad(tren, casillasCaminoInferiorB)
     entrarCiudad(tren, casillasCiudadB)
     trenesB.append(tren)
@@ -336,23 +368,31 @@ def activarTrenCiudadA():
 def activarTrenCiudadB():
     # ACTIVA TREN EN CIUDAD B Y LO MUEVE A CIUDAD A
     time.sleep(random.randrange(2, 20))
+    # SALE DE CIUDAD B, EVITANDO QUE SALGAN DOS TRENES AL MISMO TIEMPO
     mutexSalidaCiudadB.acquire()
     tren = trenesB[0]
     trenesB.remove(tren)
     mutexSalidaCiudadB.release()
+    # MUEVE A LA ENTRADA DEL PUENTE
     moverTrenAPuente(tren, casillasCaminoSuperiorB)
+    # LEVANTA SEMAFORO QUE INDICA QUE HAY UN TREN ESPERANDO Y LO AGREGA A LA LISTA DE TRENES ESPERANDO
     trenesEsperando.release()
     trenesBEsperando.append([tren, 2])
+    # ESPERA A QUE EL TREN PUEDA ENTRAR AL PUENTE
     while not entradaPuente(2, trenesAEsperando, trenesBEsperando):
+        # SI NO PUEDE PASAR, ESPERA A QUE EL PUENTE ESTE LIBRE
         puenteLibre.acquire()
     trenesBEsperando.pop(0)
+    # PASA SI HAY MENOS DE DOS TRENES EN EL PUENTE
     maxTrenesPuente.acquire()
     verdeParaB()
     trenEntroPuente.release()
+    # MUEVE EL TREN A TRAVES DEL PUENTE
     pasarPuenteDesdeB(tren)
     salirPuenteDesdeB(tren)
     trenSalioPuente.release()
     maxTrenesPuente.release()
+    # MUEVE EL TREN A CIUDAD A
     moverTrenACiudad(tren, casillasCaminoSuperiorA)
     entrarCiudad(tren, casillasCiudadA)
     trenesA.append(tren)
@@ -380,13 +420,17 @@ def puente():
     # DIBUJA AMBOS SEMAFOROS EN VERDE CUANDO SE ENCUENTRA LIBRE
     global sentido
     while True:
+        # ESPERA A QUE ENTRE UN TREN AL PUENTE
         trenEntroPuente.acquire()
         trenesEnPuente = 1
         while trenesEnPuente != 0:
+            # AUMENTA EL NUMERO DE TRENES EN EL PUENTE
             if trenEntroPuente.acquire(False):
                 trenesEnPuente += 1
+            # DISMINUYE EL NUMERO DE TRENES EN EL PUENTE
             if trenSalioPuente.acquire(False):
                 trenesEnPuente -= 1
+        # PUENTE LIBRE, NO HAY TRENES EN PUENTE
         puenteLibre.release()
         sentido = 0
         pygame.draw.circle(ventana, colorVerde, (370, 400), 20)
